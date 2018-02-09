@@ -74,24 +74,22 @@ int kernelPayload(struct thread *td, void* uap) {
 	return 0;
 }
 
-int getSealedKeyAndSecretPayload(void* td, struct get_sealed_key_payload_args* args) {
+int sceSblSsDecryptSealedKeyPayload(void* td, struct decrypt_sealed_key_payload_args* args) {
 	
 	uint8_t* ptrKernel = getKernelBase();
 	
+	sceSblSsDecryptSealedKey_ptr sceSblSsDecryptSealedKey = (sceSblSsDecryptSealedKey_ptr)&ptrKernel[KERN_SCE_SBL_SS_DECRYPT_SEALED_KEY];
+	copyin_ptr copyin = (copyin_ptr)&ptrKernel[KERN_COPY_IN];
+	copyout_ptr copyout = (copyout_ptr)&ptrKernel[KERN_COPY_OUT];
 	
-
+	byte enc[96];
+	byte dec[16];
 	
+	copyin(args->payload_info->bufEncryptedKey, enc, sizeof(enc));
 	
-	GetSealedKeyKeyAndSecret_ptr getSealedKeyKeyAndSecret = (GetSealedKeyKeyAndSecret_ptr)&ptrKernel[KERN_GET_SEALED_KEY_KEY_AND_SECRET];
-	copyout_ptr copyout = (copyout_ptr)&ptrKernel[0x286D70];
+	sceSblSsDecryptSealedKey(enc, dec);
 	
-	byte p1[16];
-	byte p2[16];
-	
-	getSealedKeyKeyAndSecret(p1, p2);
-	
-	copyout(p1, args->payload_info->bufSealedKey, sizeof(p1));
-	copyout(p2, args->payload_info->bufSealedSecret, sizeof(p2));
+	copyout(dec, args->payload_info->bufDecryptedKey, sizeof(dec));
 	
 	
 	return 0;

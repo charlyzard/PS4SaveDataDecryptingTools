@@ -1,0 +1,1 @@
+nc -w 3 192.168.1.20 9020 < PS4DecryptSaveDataKey.bin

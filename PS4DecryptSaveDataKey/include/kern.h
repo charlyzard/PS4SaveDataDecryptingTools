@@ -9,9 +9,9 @@
 #define KERN_ROOTVNODE 0x206D250
 #define KERN_PTRACE_CHECK_1 0xAC2F1
 #define KERN_PTRACE_CHECK_2 0xAC6A2
+#define KERN_SCE_SBL_SS_DECRYPT_SEALED_KEY 0x5FB800
 #define KERN_COPY_IN 0x286DF0
 #define KERN_COPY_OUT 0x286D70
-#define KERN_GET_SEALED_KEY_KEY_AND_SECRET 0x05FB630
 
 #define X86_CR0_WP (1 << 16)
 
@@ -65,12 +65,12 @@ struct thread {
 
 struct payload_info
 {
-  uint8_t* bufSealedKey;
-  uint8_t* bufSealedSecret;
+  uint8_t* bufEncryptedKey;
+  uint8_t* bufDecryptedKey;
   size_t size;
 };
 
-struct get_sealed_key_payload_args
+struct decrypt_sealed_key_payload_args
 {
   void* syscall_handler;
   struct payload_info* payload_info;
@@ -78,8 +78,8 @@ struct get_sealed_key_payload_args
 
 int kernelPayload(struct thread *td, void* uap);
 
-int getSealedKeyAndSecretPayload(void* td, struct get_sealed_key_payload_args* args);
+int sceSblSsDecryptSealedKeyPayload(void* td, struct decrypt_sealed_key_payload_args* args);
 
+typedef int (*sceSblSsDecryptSealedKey_ptr)(void *encryptedKey, void *decryptedKey);
 typedef int (*copyin_ptr)(const void *uaddr, void *kaddr, size_t len);
 typedef int (*copyout_ptr)(const void	*kaddr,	void *uaddr, size_t len);
-typedef int (*GetSealedKeyKeyAndSecret_ptr)(void *p1, void *p2);

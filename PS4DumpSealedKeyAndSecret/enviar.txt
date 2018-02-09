@@ -1,1 +1,1 @@
-nc -w 3 192.168.1.20 9020 < savedataPS4.bin
+nc -w 3 192.168.1.20 9020 < PS4DumpSealedKeyAndSecret.bin
