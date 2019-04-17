@@ -1,3 +1,4 @@
+#include "errno.h"
 #include "ps4.h"
 #include "kern.h"
 #include "kernel.h"
