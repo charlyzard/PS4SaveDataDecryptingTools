@@ -1,3 +1,5 @@
+This repository won't be updated. I've sold my PS4s. Please feel free to fork it.
+
 # PS4SaveDataDecryptingTools
 
 ## PS4DumpSealedKeyAndSecret
